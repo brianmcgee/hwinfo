@@ -1006,9 +1006,12 @@ API_SYM hd_data_t *hd_free_hd_data(hd_data_t *hd_data)
   }
   hd_data->modinfo = free_mem(hd_data->modinfo);
   if((p = hd_data->modinfo_ext)) {
-    for(; p->type; p++) free_mem(p->module);
+    for(; p->type; p++) {
+      free_mem(p->module);
+      free_mem(p->alias);
+    }
   }
-  hd_data->modinfo = free_mem(hd_data->modinfo_ext);
+  hd_data->modinfo_ext = free_mem(hd_data->modinfo_ext);
 
   if(hd_data->hddb2[0]) {
     free_mem(hd_data->hddb2[0]->list);
@@ -1828,7 +1831,7 @@ API_SYM void hd_scan(hd_data_t *hd_data)
   if(!hd_data->flags.internal) {
   /* log debug & probe flags */
     if(hd_data->debug) {
-      ADD2LOG("libhd version %s%s (%s) [%ld]\n", HD_VERSION_STRING, getuid() ? "u" : "", HD_ARCH, sizeof (hd_data_t));
+      ADD2LOG("libhd version %s%s (%s) [%zu]\n", HD_VERSION_STRING, getuid() ? "u" : "", HD_ARCH, sizeof (hd_data_t));
     }
 
     ADD2LOG("using %s\n", hd_get_hddb_dir());
@@ -5989,6 +5992,8 @@ void hd_sysfs_driver_list(hd_data_t *hd_data)
         str_printf(&sf->driver, 0, "nvme_%s", transport);
         sf->device = new_str(hd_sysfs_id(sf_dev));
         ADD2LOG("%16s: %s\n", sf->driver, sf->device);
+
+        free_mem(transport);
       }
     }
 

@@ -981,6 +981,7 @@ int braille_install_info(hd_data_t *hd_data)
   f = fopen(INSTALL_INF, "w");
   if(!f) {
     perror(INSTALL_INF);
+    free_str_list(sl0);
     return 1;
   }
 
@@ -997,6 +998,8 @@ int braille_install_info(hd_data_t *hd_data)
   fprintf(f, "Brailledevice: %s\n", braille_dev);
 
   fclose(f);
+
+  free_str_list(sl0);
 
   return 0;
 }
@@ -1177,6 +1180,7 @@ int x11_install_info(hd_data_t *hd_data)
   f = fopen(INSTALL_INF, "w");
   if(!f) {
     perror(INSTALL_INF);
+    free_str_list(sl0);
     return 1;
   }
 
@@ -1224,6 +1228,8 @@ int x11_install_info(hd_data_t *hd_data)
 
   fclose(f);
 
+  free_str_list(sl0);
+
   return 0;
 }
 
@@ -1260,7 +1266,7 @@ char *xserver3map[] =
 
 void dump_packages(hd_data_t *hd_data)
 {
-  str_list_t *sl;
+  str_list_t *sl, *sl_head;
   int i;
 
   hd_data->progress = NULL;
@@ -1273,9 +1279,12 @@ void dump_packages(hd_data_t *hd_data)
       add_str_list(&sl, strdup(xserver3map[i + 1]));
   }
 
+  sl_head = sl;
   for(; sl; sl = sl->next) {
     printf("%s\n", sl->str);
   }
+
+  free_str_list(sl_head);
 }
 
 
@@ -1332,6 +1341,8 @@ int oem_install_info(hd_data_t *hd_data)
   f = fopen(INSTALL_INF, "w");
   if(!f) {
     perror(INSTALL_INF);
+    free_str_list(sl0);
+    free_str_list(x11packs);
     return 1;
   }
   for(sl = sl0; sl; sl = sl->next) {
@@ -1354,6 +1365,10 @@ int oem_install_info(hd_data_t *hd_data)
   if (pcmcia)
     fprintf(f, "Pcmcia: %d\n", pcmcia);
   fclose(f);
+
+  free_str_list(sl0);
+  free_str_list(x11packs);
+
   return 0;
 }
 

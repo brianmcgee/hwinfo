@@ -182,7 +182,9 @@ void get_block_devs(hd_data_t *hd_data)
       if(!strcmp(bus_name, "nvme-subsystem")) {
         for(sl = read_dir(sf_dev, 'l'); sl; sl = sl->next) {
           if(!strncmp(sl->str, "nvme", 4)) {
-            sf_dev = new_str(hd_read_sysfs_link(sf_dev, sl->str));
+            char *old_sf_dev = sf_dev;
+            sf_dev = new_str(hd_read_sysfs_link(old_sf_dev, sl->str));
+            free_mem(old_sf_dev);
           }
         }
       }

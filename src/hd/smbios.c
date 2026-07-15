@@ -1579,16 +1579,10 @@ void smbios_dump(hd_data_t *hd_data, FILE *f)
         fprintf(f, "    Memory Device: #%d\n", sm->memdevicemap.memdevice_handle);
         fprintf(f, "    Array Mapping: #%d\n", sm->memdevicemap.arraymap_handle);
         if(sm->memdevicemap.row_pos != 0xff) fprintf(f, "    Row: %u\n", sm->memdevicemap.row_pos);
-        if(
-          !sm->memdevicemap.interleave_pos ||
-          sm->memdevicemap.interleave_pos != 0xff
-        ) {
+        if(sm->memdevicemap.interleave_pos != 0xff) {
           fprintf(f, "    Interleave Pos: %u\n", sm->memdevicemap.interleave_pos);
         }
-        if(
-          !sm->memdevicemap.interleave_depth ||
-          sm->memdevicemap.interleave_depth != 0xff
-        ) {
+        if(sm->memdevicemap.interleave_depth != 0xff) {
           fprintf(f, "    Interleaved Depth: %u\n", sm->memdevicemap.interleave_depth);
         }
         if((sm->memdevicemap.start_addr | sm->memdevicemap.end_addr) >> 32) {

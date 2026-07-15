@@ -57,7 +57,7 @@ void add_joystick_details(hd_data_t *hd_data, hd_t *h, const char *key, const ch
   h->detail = new_mem(sizeof *h->detail);
   h->detail->type = hd_detail_joystick;
 
-  joystick_t *jt = new_mem(sizeof jt);
+  joystick_t *jt = new_mem(sizeof *jt);
   unsigned u;
 
   if(key) {
@@ -405,6 +405,13 @@ void get_input_devices(hd_data_t *hd_data)
       continue;
     }
   }
+
+  // Free any remaining allocated strings from the last device
+  name = free_mem(name);
+  handlers = free_mem(handlers);
+  key = free_mem(key);
+  rel = free_mem(rel);
+  abso = free_mem(abso);
 
   free_str_list(input);
 

@@ -549,7 +549,7 @@ void add_input_dev(hd_data_t *hd_data, char *name)
 
   ADD2LOG(
     "  input: name = %s, path = %s\n",
-    sf_cdev_name,
+    sf_cdev_name ?: "",
     hd_sysfs_id(name)
   );
 
@@ -961,6 +961,9 @@ void get_serial_devs(hd_data_t *hd_data)
           }
         }
       }
+
+      bus_name = free_mem(bus_name);
+      sf_drv_name = free_mem(sf_drv_name);
     }
 
     sf_dev = free_mem(sf_dev);

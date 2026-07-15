@@ -275,7 +275,7 @@ void read_cpuinfo(hd_data_t *hd_data)
 
     if(*features) {
       for(t0 = features; (t = strsep(&t0, " ")); ) {
-        add_str_list(&ct->features, new_str(t));
+        add_str_list(&ct->features, t);
       }
     }
 
